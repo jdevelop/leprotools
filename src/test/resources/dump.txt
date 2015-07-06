@@ -1,0 +1,38 @@
+{
+    "base_domain": {
+        "attributes": {
+            "description": "leprosorium.ru",
+            "enabled_latvian": "enable",
+            "name": "Leprosorium"
+        },
+        "comments_count": null,
+        "create_post_validation_error": null,
+        "created": 1399850526,
+        "description": "leprosorium.ru",
+        "elections_count": null,
+        "excluded_from_top": null,
+        "id": 1,
+        "in_top": null,
+        "included_in_top": null,
+        "is_elections_enabled": null,
+        "level": null,
+        "marked_as_adult": null,
+        "name": "Leprosorium",
+        "owner": null,
+        "posts_count": null,
+        "readable_for_everyone": null,
+        "readable_for_user": null,
+        "readers_count": 0,
+        "subscribed": null,
+        "title": null,
+        "url": "leprosorium.ru"
+    },
+    "comments_count": 2732,
+    "domains_count": 0,
+    "karma_vote": -2,
+    "posts_count": 167,
+    "status": "OK",
+    "subscribers_count": 0,
+    "template": " <div class=\"b-popup_picture b-popup-user_avatar\" style=\"background-image: url(https://v1.std3.ru/78/70/1414695733-7870c4d8c1e3a57f829ff6a5b6273c16.jpg)\"></div>\n<div class=\"b-popup b-popup-user\" data-id=\"56709\">\n \n\t\t<div class=\"b-user_votes_wrapper\">\n\t\t\t<div class=\"b-user_karma js-karma\">\n\t\t\t\t\t<div class=\"b-karma_controls\">\n\t\t\t\t\t\t<i class=\"b-karma_button b-karma_button__plus b-karma_button__left_plus \" data-karma_value=\"1\" onclick=\"karmaHandler.vote('plus', 'left', '56709', this); return false;\">+</i>\n\t\t\t\t\t\t<i class=\"b-karma_button b-karma_button__plus b-karma_button__right_plus \" data-karma_value=\"1\" onclick=\"karmaHandler.vote('plus', 'right', '56709', this); return false;\">+</i>\n\t\t\t\t\t</div>\n\t\t\t\t<div class=\"b-karma_value\" onclick=\"voteResultsHandler.showVoteResult('56709', 'karma'); return false;\">\n\t\t\t\t\t<span class=\"b-karma_value_inner\" id=\"js-karma\">441</span>\n\t\t\t\t</div>\n\t\t\t\t\t<div class=\"b-karma_controls b-karma_controls__bot\">\n\t\t\t\t\t\t<i class=\"b-karma_button b-karma_button__minus b-karma_button__left_minus active\" data-karma_value=\"-1\" onclick=\"karmaHandler.vote('minus', 'left', '56709', this); return false;\">&minus;</i>\n\t\t\t\t\t\t<i class=\"b-karma_button b-karma_button__minus b-karma_button__right_minus active\" data-karma_value=\"-1\" onclick=\"karmaHandler.vote('minus', 'right', '56709', this); return false;\">&minus;</i>\n\t\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n <h3>\n <a href=\"//leprosorium.ru/users/le_big_mac\">\n Royal with cheese \n </a>\n </h3>\n <div class=\"b-popup-user_location\">\n \u0424\u0440\u0430\u043d\u0446\u0438\u044f, \u041f\u0430\u0440\u0438\u0436\n </div>\n \n#56<digits_group_separator>&nbsp;</digits_group_separator>709, \u0441 \u043d\u0430\u043c\u0438 \u0441 <span class=\"js-date js-date-regular-date\" data-epoch_date=\"1340912052\"></span> \u0433\u043e\u0434\u0430.\n <em id=\"js-usernote\" class=\"b-popup-user_note \">\n \u041c\u0435\u0441\u0442\u043e \u0434\u043b\u044f \u0437\u0430\u043c\u0435\u0442\u043e\u043a. \u0417\u0430\u043c\u0435\u0442\u043a\u0438 \u0432\u0438\u0434\u043d\u044b \u0442\u043e\u043b\u044c\u043a\u043e \u0412\u0430\u043c.\n </em>\n <div class=\"b-popup_bottom \">\n <div class=\"b-popup_stats\">\n <a href=\"//leprosorium.ru/users/le_big_mac/posts\">167 \u043f\u043e\u0441\u0442\u043e\u0432</a>\n <a href=\"//leprosorium.ru/users/le_big_mac/comments\">2732 \u043a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u044f</a>\n </div>\n\n <a class=\"b-popup-user_write\" href=\"//leprosorium.ru/my/inbox/write/le_big_mac\">\n <i class=\"b-icon b-icon-envelope\"></i>\n <span>\u043d\u0430\u043f\u0438\u0441\u0430\u0442\u044c \u0432 \u0438\u043d\u0431\u043e\u043a\u0441</span>\n </a>\n <form>\n <a id=\"js-popup_user_socialize\" class=\"b-popup_user_socialize \" href=\"//leprosorium.ru/my/socialism\" onclick=\"return popupHandler.toggleUserSubscription(this), false;\">\n <sub>\u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0432 \u0441\u043e\u0446\u0438\u0430\u043b\u0438\u0437\u043c</sub>\n <sup>\u0443\u0431\u0440\u0430\u0442\u044c \u0438\u0437 \u0441\u043e\u0446\u0438\u0430\u043b\u0438\u0437\u043c\u0430</sup>\n </a>\n <input name=\"call\" type=\"hidden\" value=\"le_big_mac\" />\n </form>\n </div>\n</div>",
+    "user_note": ""
+}
