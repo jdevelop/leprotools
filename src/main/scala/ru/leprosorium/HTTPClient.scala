@@ -63,6 +63,7 @@ object HTTPClient {
     try {
       resp.getStatusLine.getStatusCode match {
         case 200 ⇒ f(resp.getEntity.getContent)
+        case x ⇒ Left(s"Can't find user by ${req.getURI}")
       }
     } catch {
       case e: Exception ⇒

@@ -1,6 +1,7 @@
 package ru.leprosorium
 
 import java.io.{File, PrintWriter, FileWriter}
+import java.net.URLEncoder
 import java.util.concurrent.Executors
 
 import org.apache.http.client.methods.HttpGet
@@ -45,7 +46,7 @@ object Main extends App {
           case None ⇒ Left("")
           case Some(pr) ⇒
             println(s"Get ${pr}")
-            HTTPClient.withUrl(new HttpGet(HTTPClient.encodeUrl(s"https://leprosorium.ru/users/${pr.username}"))) {
+            HTTPClient.withUrl(new HttpGet(HTTPClient.encodeUrl(s"https://leprosorium.ru/users/${URLEncoder.encode(pr.username, "UTF-8")}"))) {
               case is ⇒
                 ProfilePageParser.parse(is).right.foreach {
                   prfls ⇒ prfls.foreach {
