@@ -62,7 +62,7 @@ object Main extends App {
     }
   })
 
-  Await.ready(processes, 1 hour)
+  Await.ready(processes, 1 day)
 
   sys.exit(0)
 
