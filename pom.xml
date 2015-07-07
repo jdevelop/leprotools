@@ -70,6 +70,12 @@
       <version>2.3</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.rogach</groupId>
+      <artifactId>scallop_${scala.compat.version}</artifactId>
+      <version>0.9.5</version>
+    </dependency>
+
     <!-- Test -->
     <dependency>
       <groupId>junit</groupId>

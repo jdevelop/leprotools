@@ -1,18 +1,11 @@
 package ru.leprosorium
 
 import java.io.InputStream
-import java.util.concurrent.TimeUnit
 
-import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.utils.HttpClientUtils
-import org.apache.http.config.SocketConfig
-import org.apache.http.impl.client.{BasicCookieStore, HttpClients, LaxRedirectStrategy}
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager
-import org.apache.http.impl.cookie.BasicClientCookie
 import org.apache.http.message.BasicNameValuePair
-import org.joda.time.DateTime
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 import ru.leprosorium.UserProfile.{LeproUser, ProfileDatasource, ProfileParser}
@@ -21,41 +14,6 @@ import scala.collection.JavaConversions._
 
 object Datasource {
 
-  private val TIMEOUT = 20 * 1000
-
-  private val socketConfig = SocketConfig.custom()
-    .setSoTimeout(TIMEOUT)
-    .setTcpNoDelay(true)
-    .build()
-
-  private val requestConfig = RequestConfig.custom()
-    .setSocketTimeout(TIMEOUT)
-    .setConnectTimeout(TIMEOUT)
-    .build()
-
-  private val cm = new PoolingHttpClientConnectionManager(5L, TimeUnit.SECONDS)
-
-  cm.setDefaultSocketConfig(socketConfig)
-
-  val cookieStore = new BasicCookieStore()
-
-  def mkCookie(name: String, value: String): Unit = {
-    val cookie = new BasicClientCookie(name, value)
-    cookie.setDomain(".leprosorium.ru")
-    cookie.setPath("/")
-    cookie.setExpiryDate(DateTime.now().plusDays(30).toDate)
-    cookieStore.addCookie(cookie)
-  }
-
-  mkCookie("uid", Config.Credentials.uid.toString)
-  mkCookie("sid", Config.Credentials.session)
-
-  val client = HttpClients.custom()
-    .setDefaultRequestConfig(requestConfig)
-    .setConnectionManager(cm)
-    .setRedirectStrategy(new LaxRedirectStrategy())
-    .setDefaultCookieStore(cookieStore)
-    .build()
 
   private final val LOG = LoggerFactory.getLogger(Datasource.getClass)
 
@@ -70,16 +28,13 @@ object Datasource {
           new BasicNameValuePair("csrf_token", Config.Credentials.csrf_token)
         )
       ))
-      val resp = client.execute(req)
-      try {
-        resp.getStatusLine.getStatusCode match {
-          case 200 ⇒ ev.parse(resp.getEntity.getContent)
-          case x ⇒
-            Console.err.println(s"Can't process response because of ${resp.getStatusLine}")
-            None
-        }
-      } finally {
-        HttpClientUtils.closeQuietly(resp)
+      HTTPClient.withUrl(req) {
+        case is ⇒ ev.parse(is)
+      } match {
+        case Right(p) ⇒ Some(p)
+        case Left(err) ⇒
+          LOG.error(s"Can't get page ${req.getURI} ⇒ $err")
+          None
       }
     }
   }
