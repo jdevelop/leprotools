@@ -9,15 +9,15 @@ object UserProfile {
 
   case class LeproUser(id: Int, username: String, karma: Int)
 
-  trait ProfileDatasource {
+  trait ProfileDatasource[T, S] {
 
-    def getProfile(id: Int)(implicit ev: ProfileParser): Option[LeproUser]
+    def getProfile(id: S)(implicit ev: ProfileParser[T]): Option[T]
 
   }
 
-  trait ProfileParser {
+  trait ProfileParser[T] {
 
-    def parse(is: InputStream): Option[LeproUser]
+    def parse(is: InputStream): Option[T]
 
   }
 
