@@ -33,14 +33,14 @@ object Datasource {
       } match {
         case Right(p) ⇒ Some(p)
         case Left(err) ⇒
-          LOG.error(s"Can't get page ${req.getURI} ⇒ $err")
+          LOG.error(s"Can't get page ${req.getURI} with userid [$id] ⇒ $err")
           None
       }
     }
   }
 
   implicit object SimpleProfileParser extends ProfileParser[LeproUser] {
-    override def parse(is: InputStream): Option[LeproUser] = {
+    override def parse(is: InputStream): Either[String, LeproUser] = {
 
       import argonaut._
 
@@ -50,18 +50,17 @@ object Datasource {
 
       Parse.parse(content) match {
         case -\/(errMsg) ⇒
-          LOG.error(s"Can't parse JSON: $content ⇒ $errMsg")
-          None
+          Left(s"Can't parse JSON: $content ⇒ $errMsg")
         case \/-(json) ⇒
-          for {
+          (for {
             template <- json.field("template").flatMap(_.string)
             karma <- json.field("karma_vote")
           } yield {
-            val doc = Jsoup.parse(template)
-            val id = doc.select("div[data-id]").first().attr("data-id").toInt
-            val name = doc.select("input[type=hidden]").first().attr("value")
-            LeproUser(id, name, karma.number.flatMap(_.toInt).getOrElse(0))
-          }
+              val doc = Jsoup.parse(template)
+              val id = doc.select("div[data-id]").first().attr("data-id").toInt
+              val name = doc.select("input[type=hidden]").first().attr("value")
+              LeproUser(id, name, karma.number.flatMap(_.toInt).getOrElse(0))
+            }).toRight(s"Something is wrong with the ${content}")
       }
     }
   }
@@ -69,10 +68,10 @@ object Datasource {
 
   implicit object ProfilePageParser extends ProfileParser[Iterable[LeproUser]] {
 
-    override def parse(is: InputStream): Option[Iterable[LeproUser]] = {
+    override def parse(is: InputStream): Either[String, Iterable[LeproUser]] = {
       val doc = Jsoup.parse(is, "UTF-8", "http://leprosorium.ru")
       val elems = doc.select("div[class=b-user_children] > nobr > a[class=c_user]")
-      Some(elems.map {
+      Right(elems.map {
         usr ⇒ LeproUser(usr.attr("data-user_id").toInt, usr.text(), 0)
       })
     }

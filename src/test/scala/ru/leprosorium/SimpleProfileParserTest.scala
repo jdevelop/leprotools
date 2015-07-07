@@ -12,7 +12,7 @@ class SimpleProfileParserTest extends FunSpec with ShouldMatchers {
 
     it("should parse the profile correctly") {
       val user = Datasource.SimpleProfileParser.parse(classOf[SimpleProfileParserTest].getResourceAsStream("/dump.txt"))
-      user should be(Some(LeproUser(56709, "le_big_mac", -2)))
+      user should be(Right(LeproUser(56709, "le_big_mac", -2)))
     }
 
   }

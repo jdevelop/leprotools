@@ -58,14 +58,11 @@ object HTTPClient {
     .setDefaultCookieStore(cookieStore)
     .build()
 
-  def withUrl[T](req: HttpRequestBase)(f: InputStream ⇒ Option[T]): Either[String, T] = {
+  def withUrl[T](req: HttpRequestBase)(f: InputStream ⇒ Either[String, T]): Either[String, T] = {
     val resp = client.execute(req)
     try {
       resp.getStatusLine.getStatusCode match {
-        case 200 ⇒
-          f(resp.getEntity.getContent).toRight(s"Can't parse content of ${req.getURI}")
-        case x ⇒
-          Left(resp.getStatusLine.getStatusCode.toString)
+        case 200 ⇒ f(resp.getEntity.getContent)
       }
     } catch {
       case e: Exception ⇒

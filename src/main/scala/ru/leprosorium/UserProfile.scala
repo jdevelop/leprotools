@@ -17,7 +17,7 @@ object UserProfile {
 
   trait ProfileParser[T] {
 
-    def parse(is: InputStream): Option[T]
+    def parse(is: InputStream): Either[String, T]
 
   }
 

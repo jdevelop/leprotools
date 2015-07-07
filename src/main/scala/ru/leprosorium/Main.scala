@@ -42,12 +42,12 @@ object Main extends App {
       val writer = new FileWriter(new File(baseDir, s"lepra-$chunk"))
       for (i <- chunk to (chunk + chunkSize)) {
         SimpleProfile.getProfile(i) match {
-          case None ⇒
+          case None ⇒ Left("")
           case Some(pr) ⇒
             println(s"Get ${pr}")
             HTTPClient.withUrl(new HttpGet(HTTPClient.encodeUrl(s"https://leprosorium.ru/users/${pr.username}"))) {
               case is ⇒
-                ProfilePageParser.parse(is).foreach {
+                ProfilePageParser.parse(is).right.foreach {
                   prfls ⇒ prfls.foreach {
                     child ⇒
                       writer.write(s"'${pr.username}' -> '${child.username}';\n")
@@ -56,7 +56,7 @@ object Main extends App {
                       }
                   }
                 }
-                Some()
+                Right()
             }
         }
       }
