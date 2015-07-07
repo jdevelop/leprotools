@@ -5,7 +5,7 @@ import java.net.{URI, URL}
 import java.util.concurrent.TimeUnit
 
 import org.apache.http.client.config.RequestConfig
-import org.apache.http.client.methods.HttpRequestBase
+import org.apache.http.client.methods.{CloseableHttpResponse, HttpRequestBase}
 import org.apache.http.client.utils.HttpClientUtils
 import org.apache.http.config.SocketConfig
 import org.apache.http.impl.client.{LaxRedirectStrategy, HttpClients, BasicCookieStore}
@@ -59,8 +59,9 @@ object HTTPClient {
     .build()
 
   def withUrl[T](req: HttpRequestBase)(f: InputStream ⇒ Either[String, T]): Either[String, T] = {
-    val resp = client.execute(req)
+    var resp: CloseableHttpResponse = null
     try {
+      resp = client.execute(req)
       resp.getStatusLine.getStatusCode match {
         case 200 ⇒ f(resp.getEntity.getContent)
         case x ⇒ Left(s"Can't find user by ${req.getURI}")

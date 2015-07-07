@@ -40,21 +40,25 @@ object Main extends App {
 
   val processes = Future.sequence(for (chunk <- 1 to Conf.users() by chunkSize) yield {
     val f = Future {
-      val writer = new FileWriter(new File(baseDir, s"lepra-$chunk"))
+      val writer = new FileWriter(new File(baseDir, s"lepra-$chunk-graph"))
+      val profileWriter = new FileWriter(new File(baseDir, s"lepra-$chunk-info"))
       for (i <- chunk to (chunk + chunkSize)) {
         SimpleProfile.getProfile(i) match {
           case None ⇒ Left("")
           case Some(pr) ⇒
             println(s"Get ${pr}")
+            profileWriter.write(
+              s"""${pr.id}\t${pr.username}
+                  |""".stripMargin)
             HTTPClient.withUrl(new HttpGet(HTTPClient.encodeUrl(s"https://leprosorium.ru/users/${URLEncoder.encode(pr.username, "UTF-8")}"))) {
               case is ⇒
                 ProfilePageParser.parse(is).right.foreach {
                   prfls ⇒ prfls.foreach {
                     child ⇒
-                      writer.write(s"'${pr.username}' -> '${child.username}';\n")
-                      if (chunk % 20 == 0) {
-                        writer.flush()
-                      }
+                      writer.write(
+                        s""""${pr.username}" -> "${child.username}";
+                                                                    |""".stripMargin
+                      )
                   }
                 }
                 Right()
@@ -63,6 +67,8 @@ object Main extends App {
       }
       writer.flush()
       writer.close()
+      profileWriter.flush()
+      profileWriter.close()
     }
     f onComplete {
       case Success(_) ⇒ Console.err.println(s"Chunk ${chunk} complete")
