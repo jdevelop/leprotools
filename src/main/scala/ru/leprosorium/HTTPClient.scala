@@ -12,6 +12,7 @@ import org.apache.http.impl.client.{LaxRedirectStrategy, HttpClients, BasicCooki
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager
 import org.apache.http.impl.cookie.BasicClientCookie
 import org.joda.time.DateTime
+import org.slf4j.LoggerFactory
 
 /**
  * User: Eugene Dzhurinsky
@@ -19,7 +20,9 @@ import org.joda.time.DateTime
  */
 object HTTPClient {
 
-  private val TIMEOUT = 1000
+  private final val LOG = LoggerFactory.getLogger(HTTPClient.getClass)
+
+  private val TIMEOUT = 20 * 1000
 
   private val socketConfig = SocketConfig.custom()
     .setSoTimeout(TIMEOUT)
@@ -64,7 +67,12 @@ object HTTPClient {
         case x ⇒
           Left(resp.getStatusLine.getStatusCode.toString)
       }
-    } finally {
+    } catch {
+      case e: Exception ⇒
+        LOG.error(s"Can't process URL ${req.getURI}", e)
+        Left(e.getMessage)
+    }
+    finally {
       HttpClientUtils.closeQuietly(resp)
     }
 

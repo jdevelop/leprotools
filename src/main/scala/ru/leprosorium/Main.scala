@@ -5,11 +5,15 @@ import java.util.concurrent.Executors
 
 import org.apache.http.client.methods.HttpGet
 import org.rogach.scallop.ScallopConf
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
+import scala.util.{Success, Failure}
 
 object Main extends App {
+
+  private final val LOG = LoggerFactory.getLogger(Main.getClass)
 
   object Conf extends ScallopConf(args) {
 
@@ -34,7 +38,7 @@ object Main extends App {
   val chunkSize = Conf.users() / Conf.threads()
 
   val processes = Future.sequence(for (chunk <- 1 to Conf.users() by chunkSize) yield {
-    Future {
+    val f = Future {
       val writer = new FileWriter(new File(baseDir, s"lepra-$chunk"))
       for (i <- chunk to (chunk + chunkSize)) {
         SimpleProfile.getProfile(i) match {
@@ -58,8 +62,12 @@ object Main extends App {
       }
       writer.flush()
       writer.close()
-      Console.err.println(s"Chunk ${chunk} complete")
     }
+    f onComplete {
+      case Success(_) ⇒ Console.err.println(s"Chunk ${chunk} complete")
+      case Failure(x) ⇒ LOG.error(s"Can't complete future ${chunk}", x)
+    }
+    f
   })
 
   Await.ready(processes, 1 day)
