@@ -4,7 +4,6 @@ import java.io.InputStream
 
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpPost
-import org.apache.http.client.utils.HttpClientUtils
 import org.apache.http.message.BasicNameValuePair
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
@@ -75,8 +74,7 @@ object Datasource {
       Some(elems.map {
         usr ⇒ {
           val userId: Int = usr.attr("data-user_id").toInt
-          val karma: Int = karmaProvider(userId)
-          LeproUser(userId, usr.text(), karma)
+          LeproUser(userId, usr.text(), karmaProvider(userId))
         }
       })
     }
