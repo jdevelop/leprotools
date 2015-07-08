@@ -68,11 +68,16 @@ object Datasource {
 
   implicit object ProfilePageParser extends ProfileParser[Iterable[LeproUser]] {
 
-    override def parse(is: InputStream): Either[String, Iterable[LeproUser]] = {
+    var karmaProvider : (Int => Int) = userId => SimpleProfile.getProfile(userId).map(_.karma).getOrElse(0)
+    override def parse(is: InputStream): Option[Iterable[LeproUser]] = {
       val doc = Jsoup.parse(is, "UTF-8", "http://leprosorium.ru")
       val elems = doc.select("div[class=b-user_children] > nobr > a[class=c_user]")
-      Right(elems.map {
-        usr ⇒ LeproUser(usr.attr("data-user_id").toInt, usr.text(), 0)
+      Some(elems.map {
+        usr ⇒ {
+          val userId: Int = usr.attr("data-user_id").toInt
+          val karma: Int = karmaProvider(userId)
+          LeproUser(userId, usr.text(), karma)
+        }
       })
     }
 
